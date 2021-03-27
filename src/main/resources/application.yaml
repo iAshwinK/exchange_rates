@@ -1,0 +1,12 @@
+api:
+  base.URL: https://api.exchangerate.host
+  latest: ${api.base.URL}/latest
+  historic: ${api.base.URL}/timeseries
+spring:
+  application.name: exchange_rates
+  datasource:
+    initialization-mode: always
+    platform: postgres
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+  jpa.properties.hibernate.jdbc.lob.non_contextual_creation: true
