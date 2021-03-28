@@ -23,8 +23,8 @@ public class ExchangeController {
     private ExchangeService exchangeService;
 
     @GetMapping("/{base}/{currency}")
-    @ApiOperation(value = "Retrieve Exchange Rates",tags = {"Exchange Rates"})
-    public ResponseEntity<ExchangeRate> getCustomer(@PathVariable(value = "base") CurrencyType base, @PathVariable(value = "currency") CurrencyType currency) {
+    @ApiOperation(value = "Retrieve Latest Rates",tags = {"Exchange Rates"})
+    public ResponseEntity<ExchangeRate> getLatest(@PathVariable(value = "base") CurrencyType base, @PathVariable(value = "currency") CurrencyType currency) {
         ExchangeRate response = exchangeService.getLatest(base, currency);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -32,7 +32,7 @@ public class ExchangeController {
 
     @GetMapping("/historic/{startDate}/{endDate}")
     @ApiOperation(value = "Retrieve Exchange Rates",tags = {"Exchange Rates"})
-    public ResponseEntity<List<ExchangeRate>> getCustomer(@PathVariable(value = "startDate") String startDate, @PathVariable(value = "endDate") String endDate) {
+    public ResponseEntity<List<ExchangeRate>> getHistoric(@PathVariable(value = "startDate") String startDate, @PathVariable(value = "endDate") String endDate) {
         List<ExchangeRate> response = exchangeService.getHistoric(startDate,endDate);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

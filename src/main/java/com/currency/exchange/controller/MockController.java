@@ -27,25 +27,25 @@ public class MockController {
     private ExchangeService exchangeService;
 
     @GetMapping("/save")
-    @ApiOperation(value = "save",tags = {"Mock API"})
-    public ResponseEntity<Void> mockSave(){
+    @ApiOperation(value = "save", tags = {"Mock API"})
+    public ResponseEntity<Void> mockSave() {
 
-        ExchangeRate exchangeRate = new ExchangeRate(CurrencyType.USD,new BigDecimal(12345.323), LocalDateTime.now());
+        ExchangeRate exchangeRate = new ExchangeRate(CurrencyType.USD, new BigDecimal(12345.323), LocalDateTime.now());
         dbService.save(exchangeRate);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/retrieve")
-    @ApiOperation(value = "Retrieve ",tags = {"Mock API"})
-    public ResponseEntity<ExchangeRate> mockRetrieve(){
+    @ApiOperation(value = "Retrieve ", tags = {"Mock API"})
+    public ResponseEntity<ExchangeRate> mockRetrieve() {
         ExchangeRate response = dbService.getByBase(CurrencyType.BTC);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/historic/{startDate}/{endDate}")
-    @ApiOperation(value = "Retrieve Exchange Rates",tags = {"Mock API"})
-    public ResponseEntity<List<ExchangeRate>> getCustomer(@PathVariable(value = "startDate") String startDate, @PathVariable(value = "endDate") String endDate) {
-        List<ExchangeRate> response = exchangeService.getHistoric(startDate,endDate);
+    @ApiOperation(value = "Retrieve Exchange Rates", tags = {"Mock API"})
+    public ResponseEntity<List<ExchangeRate>> getHistoric(@PathVariable(value = "startDate") String startDate, @PathVariable(value = "endDate") String endDate) {
+        List<ExchangeRate> response = exchangeService.getHistoric(startDate, endDate);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
