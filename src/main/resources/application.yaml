@@ -10,3 +10,4 @@ spring:
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
   jpa.properties.hibernate.jdbc.lob.non_contextual_creation: true
+maxMapSize: 1000

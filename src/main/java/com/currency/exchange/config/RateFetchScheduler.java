@@ -1,6 +1,7 @@
 package com.currency.exchange.config;
 
 
+import com.currency.exchange.service.DBService;
 import com.currency.exchange.service.ExchangeService;
 import com.currency.exchange.service.GatewayService;
 import com.currency.exchange.vo.CurrencyType;
@@ -8,6 +9,7 @@ import com.currency.exchange.vo.ExchangeRate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.Trigger;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
@@ -15,6 +17,7 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.ScheduledFuture;
@@ -32,6 +35,8 @@ public class RateFetchScheduler implements SchedulingConfigurer, Runnable {
     private ScheduledFuture<?> scheduledFuture;
 
     private String cronExpression = "0/30 * * * * ?";
+    @Value("${maxMapSize}")
+    private Integer maxMapSize;
 
     @Autowired
     private TaskScheduler currencyTaskScheduler;
@@ -39,6 +44,9 @@ public class RateFetchScheduler implements SchedulingConfigurer, Runnable {
     private GatewayService gatewayService;
     @Autowired
     private ExchangeService exchangeService;
+    @Autowired
+    private DBService dbService;
+
 
 
 
@@ -47,6 +55,9 @@ public class RateFetchScheduler implements SchedulingConfigurer, Runnable {
         LOGGER.info("Run started");
         ExchangeRate exchangeRate = gatewayService.getLatestRate(CurrencyType.BTC, CurrencyType.USD);
         exchangeService.dateTimeExchangeMap.put(exchangeRate.getLocalDateTime(),exchangeRate);
+        dbService.save(exchangeRate);
+        LOGGER.info("Size of events:"+exchangeService.dateTimeExchangeMap.size());
+        exchangeService.dateTimeExchangeMap.headMap(LocalDateTime.now().minusHours(4), false).clear();
         LOGGER.info("Size of events:"+exchangeService.dateTimeExchangeMap.size());
         LOGGER.info("Run completed in.");
     }

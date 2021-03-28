@@ -13,27 +13,40 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/exchange")
-public class ExchangeController {
+@RequestMapping(value = "/mock")
+public class MockController {
 
+    @Autowired
+    private DBService dbService;
     @Autowired
     private ExchangeService exchangeService;
 
-    @GetMapping("/{base}/{currency}")
-    @ApiOperation(value = "Retrieve Exchange Rates",tags = {"Exchange Rates"})
-    public ResponseEntity<ExchangeRate> getCustomer(@PathVariable(value = "base") CurrencyType base, @PathVariable(value = "currency") CurrencyType currency) {
-        ExchangeRate response = exchangeService.getLatest(base, currency);
+    @GetMapping("/save")
+    @ApiOperation(value = "save",tags = {"Mock API"})
+    public ResponseEntity<Void> mockSave(){
+
+        ExchangeRate exchangeRate = new ExchangeRate(CurrencyType.USD,new BigDecimal(12345.323), LocalDateTime.now());
+        dbService.save(exchangeRate);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/retrieve")
+    @ApiOperation(value = "Retrieve ",tags = {"Mock API"})
+    public ResponseEntity<ExchangeRate> mockRetrieve(){
+        ExchangeRate response = dbService.getByBase(CurrencyType.BTC);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-
     @GetMapping("/historic/{startDate}/{endDate}")
-    @ApiOperation(value = "Retrieve Exchange Rates",tags = {"Exchange Rates"})
+    @ApiOperation(value = "Retrieve Exchange Rates",tags = {"Mock API"})
     public ResponseEntity<List<ExchangeRate>> getCustomer(@PathVariable(value = "startDate") String startDate, @PathVariable(value = "endDate") String endDate) {
         List<ExchangeRate> response = exchangeService.getHistoric(startDate,endDate);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 }
