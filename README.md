@@ -17,3 +17,7 @@ CREATE TABLE exchange_rates
    );
 ```
 
+#### Requirement details:
+1. Java version:(Java 15) openjdk 15 2020-09-15
+2. DB: Postgresql (table name:exchange_rates)
+3. API to fetch exchange rates, I've used: https://exchangerate.host/#. Base API: https://api.exchangerate.host
