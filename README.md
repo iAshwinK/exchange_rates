@@ -16,6 +16,8 @@ CREATE TABLE exchange_rates
    exchange_value DECIMAL(20, 10) NOT NULL
    );
 ```
+DB Script Ends.
+
 
 #### Requirement details:
 1. Java version:(Java 15) openjdk 15 2020-09-15
